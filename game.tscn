@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://bxkgk82luc47w"]
+
+[ext_resource type="Script" path="res://select_box.gd" id="1_h7saj"]
+[ext_resource type="Script" path="res://game.gd" id="1_rql4g"]
+[ext_resource type="Script" path="res://unit.gd" id="2_pmufv"]
+[ext_resource type="Texture2D" uid="uid://csbc3cy04lpla" path="res://icon.svg" id="3_shlbj"]
+[ext_resource type="Script" path="res://camera.gd" id="5_hi2yb"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_va3ry"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yohne"]
+size = Vector2(130, 128)
+
+[node name="Game" type="Node2D"]
+position = Vector2(1, 0)
+script = ExtResource("1_rql4g")
+
+[node name="SelectBox" type="Node2D" parent="."]
+script = ExtResource("1_h7saj")
+
+[node name="Unit" type="CharacterBody2D" parent="."]
+modulate = Color(1, 0.0862745, 1, 1)
+material = SubResource("CanvasItemMaterial_va3ry")
+position = Vector2(708, 169)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("2_pmufv")
+
+[node name="Sprite2D" type="Sprite2D" parent="Unit"]
+texture = ExtResource("3_shlbj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit"]
+shape = SubResource("RectangleShape2D_yohne")
+
+[node name="Unit2" type="CharacterBody2D" parent="."]
+material = SubResource("CanvasItemMaterial_va3ry")
+position = Vector2(368, 168)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("2_pmufv")
+
+[node name="Sprite2D" type="Sprite2D" parent="Unit2"]
+texture = ExtResource("3_shlbj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Unit2"]
+shape = SubResource("RectangleShape2D_yohne")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(575, 320)
+script = ExtResource("5_hi2yb")
+
+[connection signal="_move_command" from="." to="Unit" method="_on_game__move_command"]
+[connection signal="_move_command" from="." to="Unit2" method="_on_game__move_command"]
