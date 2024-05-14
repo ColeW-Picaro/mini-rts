@@ -26,7 +26,8 @@ func _unhandled_input(event):
 
 func _draw():
 	if dragging:
-		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start), Color.YELLOW, false, 2.0)	
+		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start), Color.YELLOW, false, 2.0)
+		
 
 func select_units():
 	var space = get_world_2d().direct_space_state
@@ -45,8 +46,5 @@ func select_units():
 			unit.collider.selected = false
 		for unit in selected_units:
 			unit.collider.selected = true
-	
-	drag_start = Vector2.ZERO
-	drag_end = Vector2.ZERO
-		
+
 
