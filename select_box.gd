@@ -1,32 +1,39 @@
-extends Node2D
+extends Control
 class_name SelectBox
 
-var dragging = false;
+var isDragging = false;
 var selected_units = [];
-var drag_start = Vector2.ZERO;
-var drag_end = Vector2.ZERO
+var start = Vector2.ZERO;
+var end = Vector2.ZERO
+var mouse_pos = Vector2.ZERO
+var global_mouse_pos = Vector2.ZERO
 var select_rect = RectangleShape2D.new();
 
+func _process(delta):
+	if Input.is_action_just_pressed("LeftClick"):
+		isDragging = true
+		start = global_mouse_pos
+		global_mouse_pos = get_global_mouse_position()
+		pass
+	if isDragging:
+		end = global_mouse_pos
+		draw_select_box()
+		pass
+	if Input.is_action_just_released("LeftClick"):
+		isDragging = false
+		end = global_mouse_pos
+		select_units()
+		pass
+		
 func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			# Later check if there's no command being issued
-			dragging = true
-			drag_start = event.position
-		# If the mouse is released and is dragging, stop dragging
-		elif dragging:
-			dragging = false
-			queue_redraw()
-			drag_end = event.position
-			select_rect.extents = abs(drag_end - drag_start)
-			select_units()	
-			
-	if event is InputEventMouseMotion and dragging:
-		queue_redraw()
+	if event is InputEventMouse:
+		mouse_pos = event.position
+		global_mouse_pos = get_global_mouse_position()
 
-func _draw():
-	if dragging:
-		draw_rect(Rect2(drag_start, get_global_mouse_position() - drag_start), Color.YELLOW, false, 2.0)
+func draw_select_box():
+	self.size = Vector2(abs(start.x - end.x), abs(start.y - end.y)) * int(isDragging)
+	self.position = Vector2(min(start.x, end.x), min(start.y, end.y))
+	#draw_rect(Rect2(drag_start, mouse_pos - drag_start), Color.YELLOW, false, 2.0)
 		
 
 func select_units():
@@ -35,7 +42,7 @@ func select_units():
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = select_rect
 	query.collision_mask = 2  # Units are on collision layer 2
-	query.transform = Transform2D(0, abs(drag_end + drag_start) / 2)
+	query.transform = Transform2D(0, abs(end + start) / 2)
 	
 	var old_selected_units = selected_units
 	var new_selected_units = space.intersect_shape(query)
@@ -46,5 +53,4 @@ func select_units():
 			unit.collider.selected = false
 		for unit in selected_units:
 			unit.collider.selected = true
-
 

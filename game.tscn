@@ -15,7 +15,7 @@ size = Vector2(130, 128)
 position = Vector2(1, 0)
 script = ExtResource("1_rql4g")
 
-[node name="SelectBox" type="Node2D" parent="."]
+[node name="SelectBox" type="Panel" parent="."]
 script = ExtResource("1_h7saj")
 
 [node name="Unit" type="CharacterBody2D" parent="."]
