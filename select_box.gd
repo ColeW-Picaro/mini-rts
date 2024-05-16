@@ -23,6 +23,7 @@ func _process(delta):
 		isDragging = false
 		end = global_mouse_pos
 		select_units()
+		draw_select_box()
 		pass
 		
 func _unhandled_input(event):
@@ -33,16 +34,16 @@ func _unhandled_input(event):
 func draw_select_box():
 	self.size = Vector2(abs(start.x - end.x), abs(start.y - end.y)) * int(isDragging)
 	self.position = Vector2(min(start.x, end.x), min(start.y, end.y))
-	#draw_rect(Rect2(drag_start, mouse_pos - drag_start), Color.YELLOW, false, 2.0)
 		
 
 func select_units():
+	select_rect.size = self.size
 	var space = get_world_2d().direct_space_state
-	
 	var query = PhysicsShapeQueryParameters2D.new()
 	query.shape = select_rect
 	query.collision_mask = 2  # Units are on collision layer 2
 	query.transform = Transform2D(0, abs(end + start) / 2)
+	print(query.transform)
 	
 	var old_selected_units = selected_units
 	var new_selected_units = space.intersect_shape(query)

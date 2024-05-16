@@ -49,5 +49,8 @@ shape = SubResource("RectangleShape2D_yohne")
 position = Vector2(575, 320)
 script = ExtResource("5_hi2yb")
 
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(-1, 0, 15, 0, 31, 0, 47, 0, 63, 0, 79, 0, 1159, 0, 1159, 648, -1, 648, -1, 8, -1, -576, 1151, -568, 1151, -24)
+
 [connection signal="_move_command" from="." to="Unit" method="_on_game__move_command"]
 [connection signal="_move_command" from="." to="Unit2" method="_on_game__move_command"]
